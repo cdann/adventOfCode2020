@@ -32,7 +32,7 @@ enum Day6 {
     func exercise2(groups: [String]) -> Int {
         return groups.reduce(0) { (acc, group) -> Int in
             let persons = group.components(separatedBy: .newlines)
-            let commonAnswers = persons.reduce(Set("a"..."z")) { (acc, person) -> Set<Character> in
+            let commonAnswers = persons.reduce(Set("abcdefghijklmnopqrstuvwxyz")) { (acc, person) -> Set<Character> in
                 return Set<Character>(person).intersection(Set(acc))
             }
             return commonAnswers.count + acc
