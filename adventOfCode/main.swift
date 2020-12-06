@@ -7,4 +7,5 @@
 
 import Foundation
 
-Day4.step2.run()
+Day6.step1.run()
+Day6.step2.run()
