@@ -12,7 +12,7 @@ enum Day6 {
     case step2
     
     func run() {
-        let entriesGroups = Input(inputName: "Day6").contentByParagraph
+        let entriesGroups = Input(inputName: "Day6").contentByParagraph.filter({ !$0.isEmpty })
         switch self {
         case .step1:
             print(exercise1(groups: entriesGroups))
@@ -29,7 +29,7 @@ enum Day6 {
     
     func exercise2(groups: [String]) -> Int {
         return groups.reduce(0) { (acc, group) -> Int in
-            let persons = group.components(separatedBy: .newlines)
+            let persons = group.getLines()
             let commonAnswers = persons.reduce(Set("abcdefghijklmnopqrstuvwxyz")) { (acc, person) -> Set<Character> in
                 return Set<Character>(person).intersection(Set(acc))
             }

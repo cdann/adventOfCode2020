@@ -11,8 +11,7 @@ class Input {
     let content: String
     
     var contentByLine: [String] {
-        return content.split(separator: "\n")
-            .compactMap({ $0.isEmpty ? nil : String($0) })
+        return content.getLines()
     }
     
     var contentByParagraph: [String] {
