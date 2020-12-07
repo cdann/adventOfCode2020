@@ -12,9 +12,7 @@ enum Day6 {
     case step2
     
     func run() {
-        let entriesGroups = Input.entries
-            .components(separatedBy: "\n\n")
-            .filter({ !$0.isEmpty })
+        let entriesGroups = Input(inputName: "Day6").contentByParagraph
         switch self {
         case .step1:
             print(exercise1(groups: entriesGroups))

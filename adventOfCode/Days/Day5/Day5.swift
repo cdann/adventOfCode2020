@@ -31,7 +31,7 @@ enum Day5 {
                 if (character == upperChar) {
                     return (max - diff)...max
                 }
-                return min...(min+diff)
+                return min...(min + diff)
             }.min()!
         }
     }
@@ -89,5 +89,5 @@ enum Day5 {
         }
         return true
     }
-    
+
 }
