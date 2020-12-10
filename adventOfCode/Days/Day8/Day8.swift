@@ -79,8 +79,12 @@ enum Day8 {
     func exercise2(entries: [String]) {
         let operations = entries.map({ Operation.fromString($0) })
         
-        var (browsedIndex, acc, didFail) = tryBrowsing(operations: operations)
-        for index in browsedIndex {
+        var (browsedIndices, acc, didFail) = tryBrowsing(operations: operations)
+        if (!didFail) {
+            print("SUCCESS \(acc)")
+            return
+        }
+        for index in browsedIndices {
             if let replaced = operations[index].replace() {
                 var operations2 = operations
                 operations2[index] = replaced
