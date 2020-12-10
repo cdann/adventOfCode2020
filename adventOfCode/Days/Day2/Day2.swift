@@ -35,8 +35,12 @@ enum Day2 {
     
     func checkCharCount(_ entry: PolicyPasswordEntry) -> Bool {
         let charsearched = Character(entry.char)
-        let count = entry.str.filter({ $0 == charsearched}).count
-        return count >= entry.min && count <= entry.min
+        let count = entry.str.filter({ $0 == charsearched }).count
+        //print("$filteredCount ::: ${password.searchedChar} ${password.min} ${password.max} ### ${password.pwd}");
+//        if (!(count >= entry.min && count <= entry.max)) {
+            print("\(count >= entry.min && count <= entry.max)   \(count) ::: \(charsearched) \(entry.min) \(entry.max) ### \(entry.str)")
+//        }
+        return count >= entry.min && count <= entry.max
     }
 
     func checkCharPosition(_ entry: PolicyPasswordEntry) -> Bool {
