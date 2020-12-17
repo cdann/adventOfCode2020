@@ -20,4 +20,5 @@ import Foundation
 //Day9.step1.run()
 //Day9.step2.run()
 
+Day17.step1.run()
 Day17.step2.run()
