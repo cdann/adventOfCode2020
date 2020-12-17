@@ -101,7 +101,7 @@ enum Day17 {
         }
         
         func drawMap() {
-            forEachCube(
+            forEachPosition(
                 inX:(min: 0, max: 0),
                 transformBorders: { border in
                     border.map({ (min: $0.min + 1, max: $0.max - 1) })
@@ -131,20 +131,27 @@ enum Day17 {
             var newBordersY: MinMax? = nil
             var newBordersZ: MinMax? = nil
             var newBordersW: MinMax? = nil
-    
-            forEachCube { (x, y, z, w) in
-                if checkIsPositionNowActive(x: x, y: y, z: z, w: w) {
+            var checkedPosition: Set<Position> = []
+            
+            activePositions.forEach { (position) in
+                forEachPosition(inX: (min:position.x - 1, max: position.x + 1),
+                            inY: (min:position.y - 1, max: position.y + 1),
+                            inZ: (min:position.z - 1, max: position.z + 1),
+                            inW: position.w.map{ (min:$0 - 1, max: $0 + 1) }) { (x, y, z, w) in
                     let currentPosition = Position(x: x, y: y, z: z, w: w)
-                    newActivesPosition.insert(currentPosition)
-                    newBordersX = extendBordersFrom(positionInAxe: x, currentBorders: newBordersX)
-                    newBordersY = extendBordersFrom(positionInAxe: y, currentBorders: newBordersY)
-                    newBordersZ = extendBordersFrom(positionInAxe: z, currentBorders: newBordersZ)
-                    newBordersW = w.map{
-                        extendBordersFrom(positionInAxe: $0, currentBorders: newBordersW)
+                    if !checkedPosition.contains(currentPosition) && checkIsPositionNowActive(pos: currentPosition) {
+                        let currentPosition = Position(x: x, y: y, z: z, w: w)
+                        newActivesPosition.insert(currentPosition)
+                        newBordersX = extendBordersFrom(positionInAxe: x, currentBorders: newBordersX)
+                        newBordersY = extendBordersFrom(positionInAxe: y, currentBorders: newBordersY)
+                        newBordersZ = extendBordersFrom(positionInAxe: z, currentBorders: newBordersZ)
+                        newBordersW = w.map{
+                            extendBordersFrom(positionInAxe: $0, currentBorders: newBordersW)
+                        }
                     }
+                    checkedPosition.insert(currentPosition)
                 }
             }
-            
             activePositions = newActivesPosition
             bordersX = newBordersX ?? bordersX
             bordersY = newBordersY ?? bordersY
@@ -153,21 +160,21 @@ enum Day17 {
         }
         
         
-        func checkIsPositionNowActive(x: Int, y: Int, z: Int, w: Int?) -> Bool {
+        
+        func checkIsPositionNowActive(pos: Position) -> Bool {
             var actives = 0
-            forEachCube(
-                inX: (min: x - 1, max: x + 1),
-                inY: (min: y - 1, max: y + 1),
-                inZ: (min: z - 1, max: z + 1),
-                inW: w.map({ (min: $0 - 1, max: $0 + 1) })
+            forEachPosition(
+                inX: (min: pos.x - 1, max: pos.x + 1),
+                inY: (min: pos.y - 1, max: pos.y + 1),
+                inZ: (min: pos.z - 1, max: pos.z + 1),
+                inW: pos.w.map({ (min: $0 - 1, max: $0 + 1) })
             ) { (nX, nY, nZ, nW) in
-                if nZ == z && nY == y && nX == x && nW == w {
+                if nZ == pos.z && nY == pos.y && nX == pos.x && nW == pos.w {
                     return
                 }
                 actives += isActive(x: nX, y: nY, z: nZ, w: nW) ? 1 : 0
             }
-//            print("\((x: x, y: y, z: z, w: w)) \(actives)")
-            return actives == 3 || (actives == 2 && isActive(x: x, y: y, z: z, w: w))
+            return actives == 3 || (actives == 2 && activePositions.contains(pos))
         }
         
         func countActive() -> Int {
@@ -179,7 +186,7 @@ enum Day17 {
             return activePositions.contains(position)
         }
         
-        func forEachCube(
+        func forEachPosition(
             inX: MinMax? = nil,
             inY: MinMax? = nil,
             inZ: MinMax? = nil,
